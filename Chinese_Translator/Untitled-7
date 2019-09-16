@@ -1,0 +1,55 @@
+// Copyright (c) 2011 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+var tsWinID = null;
+var tsTabID = null;
+
+var exWinID = null;
+var exTabID = null;
+
+var temp;
+var tempt;
+
+function getExWindows(win) {
+  exWinID = win.id;
+  //chrome.tabs.getAllInWindow(temp.id, getTabs);
+}
+
+function getTsWindows(win) {
+  tsWinID = win.id;
+  //chrome.tabs.getAllInWindow(temp.id, getTabs);
+}
+
+function getTabs(tab) {
+  //tempt = tab.id;
+}
+
+function getTS(){
+  chrome.windows.getCurrent(getTsWindows);
+  chrome.tabs.getCurrent(getTabs);
+}
+
+function getEX(){
+  chrome.windows.getCurrent(getExWindows);
+  chrome.tabs.getCurrent(getTabs);
+}
+
+function loggo(){
+  console.log("Ex winid, tabid:",exWinID,exTabID)
+  console.log("TS winid, tabid:",tsWinID,tsTabID);
+}
+chrome.browserAction.onClicked.addListener(function(tab) {
+  console.log("Initial:",tab)
+  loggo();
+  getEX();
+
+  chrome.windows.create({url: "https://translate.google.ca"});
+  getTS();
+
+  if(exWinID){
+    chrome.windows.update(exWinID,{focused: true})
+  }
+
+  console.log("End  :")
+  loggo();
+});
